@@ -35,23 +35,20 @@ class DataDriftMonitor(ModelMonitor):
                 feature_metric.p_value, dict(feature=feature_name, feature_type=feature_metric.feature_type)
             )
 
-            yield DataDriftMonitorMetrics.current_distribution.create(
-                    4.0, dict(feature=feature_name, x=str(2.0))
+
+            current_small_hist = feature_metric.current_small_hist
+            ref_small_hist = feature_metric.ref_small_hist
+
+            for i in range(len(ref_small_hist[0])):
+                y = ref_small_hist[0][i]
+                x = ref_small_hist[1][i]
+                yield DataDriftMonitorMetrics.reference_distribution.create(
+                    y, dict(feature=feature_name, x=str(x))
                 )
 
-            # current_small_hist = feature_metric.current_small_hist
-            # ref_small_hist = feature_metric.ref_small_hist
-
-            # for i in range(len(ref_small_hist[0])):
-            #     y = ref_small_hist[0][i]
-            #     x = ref_small_hist[1][i]
-            #     yield DataDriftMonitorMetrics.reference_distribution.create(
-            #         y, dict(feature=feature_name, x=str(x))
-            #     )
-
-            # for i in range(len(current_small_hist[0])):
-            #     y = current_small_hist[0][i]
-            #     x = current_small_hist[1][i]
-            #     yield DataDriftMonitorMetrics.current_distribution.create(
-            #         y, dict(feature=feature_name, x=str(x))
-            #     )
+            for i in range(len(current_small_hist[0])):
+                y = current_small_hist[0][i]
+                x = current_small_hist[1][i]
+                yield DataDriftMonitorMetrics.current_distribution.create(
+                    y, dict(feature=feature_name, x=str(x))
+                )
