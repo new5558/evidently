@@ -46,8 +46,8 @@ class DataDriftMonitor(ModelMonitor):
                 )
 
             for i in range(len(current_small_hist[0])):
-                y = ref_small_hist[0][i]
-                x = ref_small_hist[1][i]
+                y = current_small_hist[0][i]
+                x = current_small_hist[1][i]
                 yield DataDriftMonitorMetrics.current_distribution.create(
                     y, dict(feature=feature_name, x=str(x))
                 )
