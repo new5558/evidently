@@ -12,6 +12,8 @@ class DataDriftMonitorMetrics:
     dataset_drift = ModelMonitoringMetric(f"{_tag}:dataset_drift")
     share_drifted_features = ModelMonitoringMetric(f"{_tag}:share_drifted_features")
     n_drifted_features = ModelMonitoringMetric(f"{_tag}:n_drifted_features")
+    reference_distribution = ModelMonitoringMetric(f"{_tag}:reference_distribution", ["feature", "x"])
+    current_distribution = ModelMonitoringMetric(f"{_tag}:current_distribution", ["feature", "x"])
 
 
 class DataDriftMonitor(ModelMonitor):
@@ -32,3 +34,20 @@ class DataDriftMonitor(ModelMonitor):
             yield DataDriftMonitorMetrics.p_value.create(
                 feature_metric.p_value, dict(feature=feature_name, feature_type=feature_metric.feature_type)
             )
+
+            current_small_hist = data.current_small_hist
+            ref_small_hist = data.ref_small_hist
+
+            for i in range(len(ref_small_hist[0])):
+                y = ref_small_hist[0][i]
+                x = ref_small_hist[1][i]
+                yield DataDriftMonitorMetrics.reference_distribution.create(
+                    y, dict(feature=feature_name, x=str(x))
+                )
+
+            for i in range(len(current_small_hist[0])):
+                y = ref_small_hist[0][i]
+                x = ref_small_hist[1][i]
+                yield DataDriftMonitorMetrics.current_distribution.create(
+                    y, dict(feature=feature_name, x=str(x))
+                )
