@@ -35,8 +35,8 @@ class DataDriftMonitor(ModelMonitor):
                 feature_metric.p_value, dict(feature=feature_name, feature_type=feature_metric.feature_type)
             )
 
-            current_small_hist = data.current_small_hist
-            ref_small_hist = data.ref_small_hist
+            current_small_hist = feature_metric.current_small_hist
+            ref_small_hist = feature_metric.ref_small_hist
 
             for i in range(len(ref_small_hist[0])):
                 y = ref_small_hist[0][i]
